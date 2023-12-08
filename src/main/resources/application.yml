@@ -2,9 +2,10 @@ spring:
   threads:
     virtual:
       enabled: true
-  profiles:
-    active: postgres
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
     show-sql: false
@@ -13,6 +14,11 @@ spring:
       hibernate:
         show_sql: false
         format_sql: false
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/emlakjet_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: emlakJET2006!
 
 purchasing-config:
   limit:
@@ -27,34 +33,3 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: h2
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-  datasource:
-    url: jdbc:h2:mem:emlakjet_db
-    driver-class-name: org.h2.Driver
-    username: sa
-  h2:
-    console:
-      enabled: true
-
----
-
-spring:
-  config:
-    activate:
-      on-profile: postgres
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    database: postgresql
-  datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/emlakjet_db
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: emlakJET2006!

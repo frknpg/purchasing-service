@@ -41,18 +41,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Invoice addPurchase(InvoiceRequestDTO invoiceRequestDTO) {
-        var purchasing = new Invoice(invoiceRequestDTO);
-
-        var totalLimit = invoiceRepository
-                .sumAmountByEmailAndStatus(purchasing.getEmail(), InvoiceStatus.APPROVED).orElse(0L);
-        if (totalLimit + purchasing.getAmount() > purchasingLimit.getMax()) {
-            LOG.warn("Limit overpassed for email: {}", purchasing.getEmail());
-            purchasing.setStatus(InvoiceStatus.DECLINED);
-        } else {
-            LOG.info("Purchase approved for email: {}", purchasing.getEmail());
-            purchasing.setStatus(InvoiceStatus.APPROVED);
-        }
-        return invoiceRepository.save(purchasing);
+        var invoice = new Invoice(invoiceRequestDTO);
+        updateInvoiceStatus(invoice);
+        return invoiceRepository.save(invoice);
     }
 
     /**
@@ -64,5 +55,20 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Page<Invoice> getPurchases(Pageable pageable) {
         return invoiceRepository.findAll(pageable);
+    }
+
+    private void updateInvoiceStatus(Invoice invoice) {
+        var totalApprovedAmount = invoiceRepository
+                .sumAmountByEmailAndStatus(invoice.getEmail(), InvoiceStatus.APPROVED).orElse(0L);
+
+        boolean isOverLimit = totalApprovedAmount + invoice.getAmount() > purchasingLimit.getMax();
+
+        if (isOverLimit) {
+            LOG.warn("Limit overpassed for email: {}", invoice.getEmail());
+            invoice.setStatus(InvoiceStatus.DECLINED);
+        } else {
+            LOG.info("Purchase approved for email: {}", invoice.getEmail());
+            invoice.setStatus(InvoiceStatus.APPROVED);
+        }
     }
 }

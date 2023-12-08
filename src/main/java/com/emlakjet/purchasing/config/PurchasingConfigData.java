@@ -22,6 +22,10 @@ public class PurchasingConfigData {
     }
 
     public static class Limit {
+
+        public Limit() {
+        }
+
         private Integer max = Constants.DEFAULT_LIMIT_MAX;
 
         public Integer getMax() {
