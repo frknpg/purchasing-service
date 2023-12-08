@@ -8,7 +8,7 @@ purchasing-config:
     max: 200
 
 jwt-config:
-  secret: secret
+  secret: ZW1sYWstamV0LXB1cmNoYXNpbmctc2VydmljZS1zZWNyZXQta2V5Cg==
   expiration: 86400000 # 1 day in milliseconds
 
 springdoc:

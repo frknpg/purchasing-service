@@ -1,7 +1,7 @@
 package com.emlakjet.purchasing.controller;
 
-import com.emlakjet.purchasing.controller.dto.PurchasingRequestDTO;
-import com.emlakjet.purchasing.controller.dto.PurchasingResponseDTO;
+import com.emlakjet.purchasing.dao.purchasing.PurchasingRequestDTO;
+import com.emlakjet.purchasing.dao.purchasing.PurchasingResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
