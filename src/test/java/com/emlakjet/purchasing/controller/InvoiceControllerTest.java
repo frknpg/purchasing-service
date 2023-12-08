@@ -1,5 +1,6 @@
 package com.emlakjet.purchasing.controller;
 
+import com.emlakjet.purchasing.TestProfileConfiguration;
 import com.emlakjet.purchasing.dao.invoice.InvoiceRequestDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -29,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
-public class InvoiceControllerTest {
+public class InvoiceControllerTest implements TestProfileConfiguration {
 
     private static final String INVOICES_API_V1 = "/api/v1/invoices";
 
