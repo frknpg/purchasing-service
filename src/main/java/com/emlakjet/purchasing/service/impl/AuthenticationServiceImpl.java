@@ -11,6 +11,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of the AuthenticationService interface that handles user authentication.
+ */
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -24,6 +27,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Authenticates the user with the provided email and password.
+     *
+     * @param authenticationRequestDTO the DTO containing the email and password for authentication
+     * @return an instance of AuthenticationResponseDTO containing the access token
+     * @throws AuthenticationException if the email/password is invalid
+     */
     @Override
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO authenticationRequestDTO) throws AuthenticationException {
         try {

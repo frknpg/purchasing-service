@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+
+/**
+ * Service implementation for managing invoices.
+ */
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
 
@@ -28,6 +32,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         this.purchasingLimit = purchasingConfigData.getLimit();
     }
 
+    /**
+     * Adds a purchase to the invoice repository and returns the new invoice.
+     *
+     * @param invoiceRequestDTO the invoice request DTO containing the purchase details
+     * @return the newly created invoice
+     */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public Invoice addPurchase(InvoiceRequestDTO invoiceRequestDTO) {
@@ -45,6 +55,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.save(purchasing);
     }
 
+    /**
+     * Retrieves a page of purchases from the invoice repository.
+     *
+     * @param pageable the pagination information
+     * @return a page of invoices containing the purchases
+     */
     @Override
     public Page<Invoice> getPurchases(Pageable pageable) {
         return invoiceRepository.findAll(pageable);
