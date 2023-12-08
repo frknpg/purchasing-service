@@ -8,5 +8,5 @@ import org.springframework.data.domain.Pageable;
 public interface InvoiceService {
     Invoice addPurchase(InvoiceRequestDTO invoiceRequestDTO);
 
-    Page<Invoice> getPurchases(Pageable pageable);
+    Page<Invoice> getPurchases(Pageable pageable, Invoice filter);
 }

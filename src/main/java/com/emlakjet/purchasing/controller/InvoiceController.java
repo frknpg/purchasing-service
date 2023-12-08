@@ -44,7 +44,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/v1/invoices")
-    public Page<Invoice> getPurchases(Pageable pageable) {
-        return invoiceService.getPurchases(pageable);
+    public Page<Invoice> getPurchases(Pageable pageable, Invoice filter) {
+        return invoiceService.getPurchases(pageable, filter);
     }
 }
