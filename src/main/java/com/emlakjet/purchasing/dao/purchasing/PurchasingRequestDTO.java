@@ -1,6 +1,12 @@
 package com.emlakjet.purchasing.dao.purchasing;
 
-public record PurchasingRequestDTO(String firstName, String lastName,
-                                    String email, int amount,
-                                    String productName, int billNo) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record PurchasingRequestDTO(@NotBlank String firstName,
+                                   @NotBlank String lastName,
+                                   @NotBlank String email,
+                                   @NotNull Integer amount,
+                                   @NotBlank String productName,
+                                   @NotNull Integer billNo) {
 }

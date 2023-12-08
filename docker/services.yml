@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  purchasing-service:
+    image: purchasing:${SERVICE_VERSION:-latest}
+    platform: linux/amd64
+    ports:
+      - "8080:8080"
+      - "5008:5008"
+    volumes:
+      - "./docker-logs:/workspace/logs"
+    depends_on:
+      - purchasing-db
+    environment:
+      JAVA_OPTS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5008'
+      LOGGING_LEVEL_COM_EMLAKJET_PURCHASING: info
+      LOGGING_LEVEL_ROOT: info
+      SERVER_PORT: 8080
+      PURCHASING-CONFIG_LIMIT_MAX:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://purchasing-db:5432/emlakjet_db
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+
+  purchasing-db:
+    image: postgres:${POSTGRES_VERSION:-latest}
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'emlakJET2006!'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_DB: 'emlakjet_db'
+    volumes:
+      - purchasing-data:/var/lib/postgresql/data
+    networks:
+      - ${GLOBAL_NETWORK:-services}
+
+volumes:
+  purchasing-data:
