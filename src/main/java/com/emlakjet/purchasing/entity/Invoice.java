@@ -1,6 +1,6 @@
 package com.emlakjet.purchasing.entity;
 
-import com.emlakjet.purchasing.dao.purchasing.PurchasingRequestDTO;
+import com.emlakjet.purchasing.dao.invoice.InvoiceRequestDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,12 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-        name = "purchasing",
-        indexes = @Index(columnList = "billNo"),
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"billNo"})}
-)
-public class Purchasing {
+@Table(name = "invoice")
+public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,27 +26,31 @@ public class Purchasing {
     private String email;
 
     @Column(nullable = false)
-    private Integer amount;
+    private Long amount;
 
     @Column(nullable = false)
     private String productName;
 
     @Column(nullable = false)
-    private Integer billNo;
+    private Long billNo;
+
+    @Enumerated
+    @Column(nullable = false)
+    private InvoiceStatus status = InvoiceStatus.DECLINED;
 
     @CreatedDate
     private LocalDateTime createdTime = LocalDateTime.now();
 
-    public Purchasing() {
+    public Invoice() {
     }
 
-    public Purchasing(PurchasingRequestDTO purchasingRequestDTO) {
-        this.firstName = purchasingRequestDTO.firstName();
-        this.lastName = purchasingRequestDTO.lastName();
-        this.email = purchasingRequestDTO.email();
-        this.amount = purchasingRequestDTO.amount();
-        this.productName = purchasingRequestDTO.productName();
-        this.billNo = purchasingRequestDTO.billNo();
+    public Invoice(InvoiceRequestDTO invoiceRequestDTO) {
+        this.firstName = invoiceRequestDTO.firstName();
+        this.lastName = invoiceRequestDTO.lastName();
+        this.email = invoiceRequestDTO.email();
+        this.amount = invoiceRequestDTO.amount();
+        this.productName = invoiceRequestDTO.productName();
+        this.billNo = invoiceRequestDTO.billNo();
     }
 
     public void setId(Long id) {
@@ -85,11 +85,11 @@ public class Purchasing {
         this.email = email;
     }
 
-    public Integer getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
@@ -101,12 +101,20 @@ public class Purchasing {
         this.productName = productName;
     }
 
-    public Integer getBillNo() {
+    public Long getBillNo() {
         return billNo;
     }
 
-    public void setBillNo(Integer billNo) {
+    public void setBillNo(Long billNo) {
         this.billNo = billNo;
+    }
+
+    public InvoiceStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedTime() {

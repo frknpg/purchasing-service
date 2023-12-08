@@ -3,11 +3,13 @@ package com.emlakjet.purchasing.exception.handler;
 import com.emlakjet.purchasing.exception.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -36,6 +38,12 @@ public class PurchasingServiceExceptionHandler {
     public ResponseEntity<String> handle(IllegalArgumentException ex) {
         LOG.error("Illegal argument exception!", ex);
         return ResponseEntity.badRequest().body("Illegal argument exception! " + ex.getMessage());
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> conflict(DataIntegrityViolationException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)

@@ -37,7 +37,7 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService users() {
         UserDetails accountant = User.builder()
-                .username("demouser@emlakjet.local")
+                .username("john@doe.com")
                 .password(passwordEncoder().encode("demopass"))
                 .roles("ACCOUNTANT")
                 .build();
