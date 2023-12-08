@@ -23,12 +23,48 @@ In order to test project run the `mvn test` command in the project root director
 * Transaction Information: "Jane,Doe,jane@doe.com,201,TR0001" Credit Limit : 200
   Result : The transaction of John Doe is rejected
 
+```
 1) Transaction Information: "Jane,Doe,jane@doe.com,199,TR0001"
 2) Transaction Information: "Jane,Doe,jane@doe.com,2,TR0002" 
 
 Credit Limit : 200
    
 Result : The second transaction of Jane Doe is rejected
+```
+
+## CURL Examples
+
+* Authentication
+
+```shell
+accessToken=$(curl --location 'http://localhost:8080/api/v1/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{"email": "john@doe.com","password": "demopass"}' \
+ | jq -r '.accessToken')
+```
+
+* Add a new invoice
+
+```shell
+curl --location 'http://localhost:8080/api/v1/invoices' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer '$accessToken \
+--data-raw '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@doe.com",
+    "amount": 45,
+    "productName": "TR0001",
+    "billNo": 2
+}'
+```
+
+* Get invoice list
+
+```shell
+curl --location 'http://localhost:8080/api/v1/invoices' \
+--header 'Authorization: Bearer '$accessToken
+```
 
 ## Development Requirements
 
