@@ -1,0 +1,18 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+purchasing-config:
+  limit:
+    max: 200
+
+jwt-config:
+  secret: secret
+  expiration: 86400000 # 1 day in milliseconds
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
