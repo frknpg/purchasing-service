@@ -1,5 +1,6 @@
 package com.emlakjet.purchasing.config;
 
+import com.emlakjet.purchasing.shared.Constants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,8 +21,8 @@ public class PurchasingConfigData {
         this.limit = limit;
     }
 
-    private static class Limit {
-        private Integer max;
+    public static class Limit {
+        private Integer max = Constants.DEFAULT_LIMIT_MAX;
 
         public Integer getMax() {
             return max;

@@ -2,12 +2,17 @@ package com.emlakjet.purchasing.entity;
 
 import com.emlakjet.purchasing.dao.purchasing.PurchasingRequestDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
 @Entity
-
+@Table(
+        name = "purchasing",
+        indexes = @Index(columnList = "billNo"),
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"billNo"})}
+)
 public class Purchasing {
 
     @Id
@@ -21,6 +26,7 @@ public class Purchasing {
     private String lastName;
 
     @Column(nullable = false)
+    @Email
     private String email;
 
     @Column(nullable = false)
