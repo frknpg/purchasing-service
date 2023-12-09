@@ -2,6 +2,7 @@ package com.emlakjet.purchasing.controller;
 
 import com.emlakjet.purchasing.TestProfileConfiguration;
 import com.emlakjet.purchasing.dao.invoice.InvoiceRequestDTO;
+import com.emlakjet.purchasing.entity.InvoiceStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -23,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * behaves correctly for different scenarios.
  *
  * @springBootTest This annotation is used to indicate that the test should run in the context of a Spring Boot application
- *                 with a random port.
+ * with a random port.
  * @autoConfigureMockMvc This annotation is used to automatically configure the MockMvc instance for the test.
  * @activeProfiles This annotation specifies that the "test" profile should be active during the test.
  */
@@ -133,6 +135,66 @@ public class InvoiceControllerTest implements TestProfileConfiguration {
 
         mvc.perform(createCreateInvoiceRequest(requestDTO2))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * This test methods checks total element size when no data.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
+    @Test
+    public void invoices_withoutData_getEmptyContent() throws Exception {
+        var result = getInvoiceResponse(null);
+        assertThat(result.contains("\"totalElements\":0"));
+    }
+
+    /**
+     * This test methods checks total element size when only one data.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
+    @Test
+    public void invoices_withAddData_getOneElement() throws Exception {
+        var requestDTO = new InvoiceRequestDTO(
+                "John", "Doe",
+                "johndoe@mail.com", 101L, "TR0001", 123L);
+
+        mvc.perform(createCreateInvoiceRequest(requestDTO))
+                .andExpect(status().isOk());
+
+        var result = getInvoiceResponse(null);
+        assertThat(result.contains("\"totalElements\":1"));
+    }
+
+    /**
+     * This test methods checks total element size when only one data.
+     *
+     * @throws Exception if an error occurs during the test execution
+     */
+    @Test
+    public void invoices_withStatusFilter_getEmptyContent() throws Exception {
+        var requestDTO = new InvoiceRequestDTO(
+                "John", "Doe",
+                "johndoe@mail.com", 101L, "TR0001", 123L);
+
+        mvc.perform(createCreateInvoiceRequest(requestDTO))
+                .andExpect(status().isOk());
+
+        var result = getInvoiceResponse(InvoiceStatus.DECLINED);
+        assertThat(result.contains("\"totalElements\":0"));
+    }
+
+    private String getInvoiceResponse(InvoiceStatus status) throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(INVOICES_API_V1)
+                .accept(JSON_TYPE);
+        if (status != null) {
+            requestBuilder.param("status", status.name());
+        }
+
+        var result = mvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        return result;
     }
 
     public MockHttpServletRequestBuilder createCreateInvoiceRequest(InvoiceRequestDTO requestDTO)
