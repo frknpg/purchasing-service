@@ -17,6 +17,7 @@
 		<java.version>21</java.version>
 		<springdoc.version>2.3.0</springdoc.version>
 		<jwtt.version>0.12.3</jwtt.version>
+		<spring-retry.version>2.0.4</spring-retry.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -30,6 +31,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+			<version>${spring-retry.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

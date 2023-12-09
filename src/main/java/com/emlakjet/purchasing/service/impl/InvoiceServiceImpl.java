@@ -8,10 +8,13 @@ import com.emlakjet.purchasing.repository.InvoiceRepository;
 import com.emlakjet.purchasing.service.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +47,7 @@ public class InvoiceServiceImpl implements InvoiceService {
      */
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Retryable(retryFor = {PessimisticLockingFailureException.class}, maxAttempts = 2, backoff = @Backoff(delay = 1000))
     public Invoice addPurchase(InvoiceRequestDTO invoiceRequestDTO) {
         var invoice = new Invoice(invoiceRequestDTO);
         updateInvoiceStatus(invoice);
